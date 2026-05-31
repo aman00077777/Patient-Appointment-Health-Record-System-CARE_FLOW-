@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Registration{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center my-4">
+    <div class="col-lg-8">
+        <div class="card p-4">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary p-3 rounded-circle d-inline-block mb-3">
+                        <i class="fa-solid fa-user-plus fs-2"></i>
+                    </div>
+                    <h3 class="fw-bold text-teal" style="color: var(--primary-color);">Patient Registration</h3>
+                    <p class="text-secondary small">Join our clinic portal to organize your records and consultations.</p>
+                </div>
+
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    
+                    <h5 class="fw-bold text-secondary border-bottom pb-2 mb-3"><i class="fa-solid fa-user me-2"></i>Personal Details</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label fw-semibold">Full Name</label>
+                            {% if form.name.errors %}
+                                {{ form.name(class="form-control is-invalid", placeholder="First & Last Name") }}
+                                <div class="invalid-feedback">{% for e in form.name.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.name(class="form-control", placeholder="First & Last Name") }}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label fw-semibold">Email Address</label>
+                            {% if form.email.errors %}
+                                {{ form.email(class="form-control is-invalid", placeholder="yourname@gmail.com") }}
+                                <div class="invalid-feedback">{% for e in form.email.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.email(class="form-control", placeholder="yourname@gmail.com") }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold text-secondary border-bottom pb-2 mb-3"><i class="fa-solid fa-lock me-2"></i>Security Credentials</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="password" class="form-label fw-semibold">Password</label>
+                            {% if form.password.errors %}
+                                {{ form.password(class="form-control is-invalid", placeholder="Minimum 6 characters") }}
+                                <div class="invalid-feedback">{% for e in form.password.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.password(class="form-control", placeholder="Minimum 6 characters") }}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="confirm_password" class="form-label fw-semibold">Confirm Password</label>
+                            {% if form.confirm_password.errors %}
+                                {{ form.confirm_password(class="form-control is-invalid", placeholder="Re-type password") }}
+                                <div class="invalid-feedback">{% for e in form.confirm_password.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.confirm_password(class="form-control", placeholder="Re-type password") }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold text-secondary border-bottom pb-2 mb-3"><i class="fa-solid fa-notes-medical me-2"></i>Demographics & Contact Information</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label for="phone" class="form-label fw-semibold">Phone Number</label>
+                            {% if form.phone.errors %}
+                                {{ form.phone(class="form-control is-invalid", placeholder="Phone number") }}
+                                <div class="invalid-feedback">{% for e in form.phone.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.phone(class="form-control", placeholder="Phone number") }}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="date_of_birth" class="form-label fw-semibold">Date of Birth</label>
+                            {% if form.date_of_birth.errors %}
+                                {{ form.date_of_birth(class="form-control is-invalid", type="date") }}
+                                <div class="invalid-feedback">{% for e in form.date_of_birth.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.date_of_birth(class="form-control", type="date") }}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-4">
+                            <label for="gender" class="form-label fw-semibold">Gender</label>
+                            {% if form.gender.errors %}
+                                {{ form.gender(class="form-select is-invalid") }}
+                                <div class="invalid-feedback">{% for e in form.gender.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.gender(class="form-select") }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label for="blood_group" class="form-label fw-semibold">Blood Group</label>
+                            {% if form.blood_group.errors %}
+                                {{ form.blood_group(class="form-select is-invalid") }}
+                                <div class="invalid-feedback">{% for e in form.blood_group.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.blood_group(class="form-select") }}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-8">
+                            <label for="address" class="form-label fw-semibold">Residential Address</label>
+                            {% if form.address.errors %}
+                                {{ form.address(class="form-control is-invalid", placeholder="Full home address", rows=1) }}
+                                <div class="invalid-feedback">{% for e in form.address.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.address(class="form-control", placeholder="Full home address", rows=1) }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-3 mt-4">
+                        {{ form.submit(class="btn btn-primary btn-lg rounded-3") }}
+                    </div>
+                    
+                    <div class="text-center">
+                        <span class="text-secondary small">Already registered? <a href="{{ url_for('patient.patient_login') }}" class="text-decoration-none fw-bold" style="color: var(--primary-color);">Log in to dashboard</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to CareFlow{% endblock %}
+
+{% block content %}
+<div class="row align-items-center hero-section g-5 my-3">
+    <div class="col-lg-7 text-center text-lg-start">
+        <span class="badge bg-teal-soft text-teal mb-3 px-3 py-2 rounded-pill font-weight-bold" style="background-color: rgba(15, 118, 110, 0.1); color: var(--primary-color);">
+            <i class="fa-solid fa-sparkles me-1"></i> Hospital Management Redefined
+        </span>
+        <h1 class="display-4 fw-bold lh-sm mb-3" style="color: var(--primary-color);">
+            Digital Health Records & Automated Bookings
+        </h1>
+        <p class="lead text-secondary mb-4">
+            CareFlow is an end-to-end hospital administration portal. It bridges patients, expert physicians, and administrators seamlessly, featuring instant appointment bookings, dynamic health timelines, dynamic charts, and auto-generated PDF prescriptions.
+        </p>
+        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start">
+            <a href="{{ url_for('patient.patient_register') }}" class="btn btn-primary btn-lg shadow-sm">
+                <i class="fa-solid fa-user-plus me-2"></i>Patient Registration
+            </a>
+            <a href="{{ url_for('patient.patient_login') }}" class="btn btn-outline-secondary btn-lg shadow-sm">
+                <i class="fa-solid fa-right-to-bracket me-2"></i>Patient Portal
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-5 text-center">
+        <!-- SVG Professional Medical Illustration -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="100%" height="auto" class="img-fluid drop-shadow">
+            <defs>
+                <linearGradient id="primary-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0f766e" />
+                    <stop offset="100%" stop-color="#1e40af" />
+                </linearGradient>
+                <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.2" />
+                    <stop offset="100%" stop-color="#0f766e" stop-opacity="0.05" />
+                </linearGradient>
+            </defs>
+            <!-- Background Shape -->
+            <rect x="20" y="20" width="460" height="360" rx="30" fill="url(#accent-grad)" />
+            <!-- Grid Lines -->
+            <line x1="50" y1="100" x2="450" y2="100" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="5,5" />
+            <line x1="50" y1="200" x2="450" y2="200" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="5,5" />
+            <line x1="50" y1="300" x2="450" y2="300" stroke="#e2e8f0" stroke-width="2" stroke-dasharray="5,5" />
+            <!-- Pulse/Heart Rate Line -->
+            <path d="M 50,200 L 150,200 L 170,140 L 190,260 L 210,180 L 220,210 L 230,200 L 320,200 L 340,100 L 360,300 L 380,180 L 390,210 L 400,200 L 450,200" 
+                  fill="none" stroke="url(#primary-grad)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+            <!-- Doctor Silhouette / Medical Symbol -->
+            <circle cx="250" cy="200" r="50" fill="#ffffff" stroke="#0f766e" stroke-width="4" />
+            <path d="M 230,200 H 270 M 250,180 V 220" fill="none" stroke="#0f766e" stroke-width="8" stroke-linecap="round" />
+        </svg>
+    </div>
+</div>
+
+<h3 class="fw-bold mb-4 mt-5 text-center text-lg-start" style="color: var(--primary-color);">Access Portal Gateways</h3>
+<div class="row g-4 mb-5">
+    <!-- Patient Gateway -->
+    <div class="col-md-4">
+        <div class="card h-100 p-3">
+            <div class="card-body">
+                <div class="icon-box bg-info bg-opacity-10 text-info p-3 rounded-4 mb-3 d-inline-block">
+                    <i class="fa-solid fa-hospital-user fs-3"></i>
+                </div>
+                <h5 class="fw-bold card-title">Patient Portal</h5>
+                <p class="text-secondary card-text">
+                    Book standard consultations instantly, cancel appointments, view full medical diagnoses, download digital PDFs, and get automatically notified before your visit.
+                </p>
+                <div class="mt-4 d-grid gap-2">
+                    <a href="{{ url_for('patient.patient_login') }}" class="btn btn-outline-info rounded-3 py-2">
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>Patient Login
+                    </a>
+                    <a href="{{ url_for('patient.patient_register') }}" class="btn btn-info text-white rounded-3 py-2">
+                        <i class="fa-solid fa-user-plus me-2"></i>Create Account
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Doctor Gateway -->
+    <div class="col-md-4">
+        <div class="card h-100 p-3">
+            <div class="card-body">
+                <div class="icon-box bg-success bg-opacity-10 text-success p-3 rounded-4 mb-3 d-inline-block">
+                    <i class="fa-solid fa-user-doctor fs-3"></i>
+                </div>
+                <h5 class="fw-bold card-title">Doctor Dashboard</h5>
+                <p class="text-secondary card-text">
+                    Manage daily patient rosters, inspect clinical history, write detailed diagnosis notes, and prescribe multi-drug medication scripts instantly.
+                </p>
+                <div class="mt-4 d-grid">
+                    <a href="{{ url_for('doctor.doctor_login') }}" class="btn btn-success rounded-3 py-2">
+                        <i class="fa-solid fa-prescription me-2"></i>Physician Access
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Gateway -->
+    <div class="col-md-4">
+        <div class="card h-100 p-3">
+            <div class="card-body">
+                <div class="icon-box bg-primary bg-opacity-10 text-primary p-3 rounded-4 mb-3 d-inline-block">
+                    <i class="fa-solid fa-user-shield fs-3"></i>
+                </div>
+                <h5 class="fw-bold card-title">Administrative Hub</h5>
+                <p class="text-secondary card-text">
+                    Onboard and manage consulting physicians, inspect all current clinic schedules, view real-time analytic charts, and download a report of all patients.
+                </p>
+                <div class="mt-4 d-grid">
+                    <a href="{{ url_for('admin.admin_login') }}" class="btn btn-primary rounded-3 py-2">
+                        <i class="fa-solid fa-chart-pie me-2"></i>Administrator Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

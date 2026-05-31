@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Book Appointment{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center my-4">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary p-3 rounded-circle d-inline-block mb-3">
+                        <i class="fa-solid fa-calendar-check fs-2"></i>
+                    </div>
+                    <h3 class="fw-bold text-teal" style="color: var(--primary-color);">Book Appointment</h3>
+                    <p class="text-secondary small">Choose a physician, pick a convenient date and time slot.</p>
+                </div>
+
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        <label for="doctor" class="form-label fw-semibold"><i class="fa-solid fa-user-doctor me-1 text-teal" style="color: var(--primary-color);"></i> Select Consulting Doctor</label>
+                        {% if form.doctor.errors %}
+                            {{ form.doctor(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.doctor.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.doctor(class="form-select") }}
+                        {% endif %}
+                        <div class="form-text small text-secondary">Physicians are listed with their specialties and fees.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="appointment_date" class="form-label fw-semibold"><i class="fa-solid fa-calendar-day me-1 text-teal" style="color: var(--primary-color);"></i> Preferred Date</label>
+                        {% if form.appointment_date.errors %}
+                            {{ form.appointment_date(class="form-control is-invalid", type="date") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.appointment_date.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.appointment_date(class="form-control", type="date") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="appointment_time" class="form-label fw-semibold"><i class="fa-solid fa-clock me-1 text-teal" style="color: var(--primary-color);"></i> Preferred Time Slot</label>
+                        {% if form.appointment_time.errors %}
+                            {{ form.appointment_time(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.appointment_time.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.appointment_time(class="form-select") }}
+                        {% endif %}
+                        <div class="form-text small text-secondary">Appointments are structured in 30-minute intervals.</div>
+                    </div>
+
+                    <div class="d-grid gap-2 mb-2">
+                        {{ form.submit(class="btn btn-primary btn-lg rounded-3") }}
+                        <a href="{{ url_for('patient.patient_dashboard') }}" class="btn btn-outline-secondary rounded-3">Cancel & Return</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Doctors{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+    <div>
+        <h3 class="fw-bold text-teal mb-0" style="color: var(--primary-color);">
+            <i class="fa-solid fa-user-doctor me-2"></i>Doctor Directory & Onboarding
+        </h3>
+        <p class="text-secondary small mb-0">Onboard expert specialists and oversee clinic consulting fees.</p>
+    </div>
+    <a href="{{ url_for('admin.admin_dashboard') }}" class="btn btn-outline-secondary rounded-3">
+        <i class="fa-solid fa-arrow-left me-1"></i>Back to Admin Hub
+    </a>
+</div>
+
+<div class="row g-4">
+    <!-- Left Column: Add Doctor Form -->
+    <div class="col-lg-5">
+        <div class="card p-3">
+            <div class="card-body">
+                <h5 class="fw-bold mb-3 border-bottom pb-2 text-teal" style="color: var(--primary-color);"><i class="fa-solid fa-user-plus me-1"></i>Onboard New Physician</h5>
+                
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-semibold">Doctor Full Name</label>
+                        {% if form.name.errors %}
+                            {{ form.name(class="form-control is-invalid", placeholder="e.g. Dr. Satish Kumar") }}
+                            <div class="invalid-feedback">{% for e in form.name.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                        {% else %}
+                            {{ form.name(class="form-control", placeholder="e.g. Dr. Satish Kumar") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold">Login Email Address</label>
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control is-invalid", placeholder="e.g. satish.med@careflow.com") }}
+                            <div class="invalid-feedback">{% for e in form.email.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                        {% else %}
+                            {{ form.email(class="form-control", placeholder="e.g. satish.med@careflow.com") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-semibold">Temporary Access Password</label>
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control is-invalid", placeholder="Minimum 6 characters") }}
+                            <div class="invalid-feedback">{% for e in form.password.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                        {% else %}
+                            {{ form.password(class="form-control", placeholder="Minimum 6 characters") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="specialization" class="form-label fw-semibold">Consulting Specialty</label>
+                        {% if form.specialization.errors %}
+                            {{ form.specialization(class="form-select is-invalid") }}
+                            <div class="invalid-feedback">{% for e in form.specialization.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                        {% else %}
+                            {{ form.specialization(class="form-select") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label for="license_number" class="form-label fw-semibold">License Number</label>
+                            {% if form.license_number.errors %}
+                                {{ form.license_number(class="form-control is-invalid", placeholder="e.g. MC-98765") }}
+                                <div class="invalid-feedback">{% for e in form.license_number.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.license_number(class="form-control", placeholder="e.g. MC-98765") }}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="consultation_fee" class="form-label fw-semibold">Consulting Fee (INR)</label>
+                            {% if form.consultation_fee.errors %}
+                                {{ form.consultation_fee(class="form-control is-invalid", type="number", step="50") }}
+                                <div class="invalid-feedback">{% for e in form.consultation_fee.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.consultation_fee(class="form-control", type="number", step="50") }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="available_hours" class="form-label fw-semibold">Clinic Availability Hours</label>
+                        {% if form.available_hours.errors %}
+                            {{ form.available_hours(class="form-control is-invalid", placeholder="e.g. 09:00 - 17:00") }}
+                            <div class="invalid-feedback">{% for e in form.available_hours.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                        {% else %}
+                            {{ form.available_hours(class="form-control", placeholder="e.g. 09:00 - 17:00") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary rounded-3 py-2.5") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column: Doctor Roster List -->
+    <div class="col-lg-7">
+        <div class="card p-3">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-3 border-bottom pb-2">
+                    <h5 class="fw-bold mb-0 text-teal" style="color: var(--primary-color);"><i class="fa-solid fa-user-md me-1"></i>Active Doctors Directory</h5>
+                    <span class="badge bg-secondary-subtle text-secondary px-2 py-1">{{ doctors|length }} Total Doctors</span>
+                </div>
+                
+                {% if doctors %}
+                    <div class="table-responsive" style="max-height: 550px; overflow-y: auto;">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Doctor Name</th>
+                                    <th>Specialization</th>
+                                    <th>License</th>
+                                    <th>Consult Fee</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for doc in doctors %}
+                                <tr>
+                                    <td class="fw-bold">Dr. {{ doc.user.name }}</td>
+                                    <td><span class="badge bg-primary bg-opacity-10 text-primary border-0 rounded-pill px-2.5 py-1 small">{{ doc.specialization }}</span></td>
+                                    <td class="small text-secondary">{{ doc.license_number }}</td>
+                                    <td class="fw-bold text-teal" style="color: var(--primary-color);">INR {{ doc.consultation_fee }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="text-center py-5">
+                        <i class="fa-solid fa-users-slash text-secondary opacity-35 fs-1 mb-2"></i>
+                        <p class="text-secondary mb-0">No consulting physicians onboarded. Add a specialist using the left form.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

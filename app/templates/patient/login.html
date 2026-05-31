@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center my-5">
+    <div class="col-md-5">
+        <div class="card p-4">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary p-3 rounded-circle d-inline-block mb-3">
+                        <i class="fa-solid fa-hospital-user fs-2"></i>
+                    </div>
+                    <h3 class="fw-bold text-teal" style="color: var(--primary-color);">Patient Login</h3>
+                    <p class="text-secondary small">Access your medical files, book visits, and download scripts.</p>
+                </div>
+
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-semibold"><i class="fa-solid fa-envelope me-1 text-teal" style="color: var(--primary-color);"></i> Email Address</label>
+                        {% if form.email.errors %}
+                            {{ form.email(class="form-control is-invalid", placeholder="Enter your email") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.email.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.email(class="form-control", placeholder="Enter your email") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-semibold"><i class="fa-solid fa-lock me-1 text-teal" style="color: var(--primary-color);"></i> Password</label>
+                        {% if form.password.errors %}
+                            {{ form.password(class="form-control is-invalid", placeholder="Enter password") }}
+                            <div class="invalid-feedback">
+                                {% for error in form.password.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ form.password(class="form-control", placeholder="Enter password") }}
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        {{ form.submit(class="btn btn-primary btn-lg rounded-3") }}
+                    </div>
+                    
+                    <div class="text-center mt-3">
+                        <span class="text-secondary small">New patient? <a href="{{ url_for('patient.patient_register') }}" class="text-decoration-none fw-bold" style="color: var(--primary-color);">Create an account here</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

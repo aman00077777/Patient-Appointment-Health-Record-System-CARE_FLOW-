@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Dashboard{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    <!-- Doctor Profile Summary Card -->
+    <div class="col-lg-4">
+        <div class="card p-3 h-100">
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="icon-box bg-success bg-opacity-10 text-success p-4 rounded-circle d-inline-block mb-3" style="width: 80px; height: 80px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fa-solid fa-user-md fs-1"></i>
+                    </div>
+                    <h4 class="fw-bold mb-1">Dr. {{ current_user.name }}</h4>
+                    <span class="badge bg-success px-3 py-1.5 rounded-pill small">{{ doctor.specialization }}</span>
+                </div>
+
+                <ul class="list-group list-group-flush mt-3">
+                    <li class="list-group-item d-flex justify-content-between py-2.5">
+                        <span class="text-secondary fw-semibold">License Number:</span>
+                        <span class="fw-bold">{{ doctor.license_number }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between py-2.5">
+                        <span class="text-secondary fw-semibold">Consultation Fee:</span>
+                        <span class="fw-bold text-teal" style="color: var(--primary-color);">INR {{ "%.2f"|format(doctor.consultation_fee) }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between py-2.5">
+                        <span class="text-secondary fw-semibold">Available Hours:</span>
+                        <span class="fw-bold small">{{ doctor.available_hours }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between py-2.5">
+                        <span class="text-secondary fw-semibold">Physician Email:</span>
+                        <span class="fw-bold small">{{ current_user.email }}</span>
+                    </li>
+                </ul>
+
+                <div class="alert alert-info mt-4 mb-0 border-0 rounded-3 small">
+                    <i class="fa-solid fa-circle-info me-1"></i>
+                    Keep records updated. Patients instantly receive completed prescription PDFs in their portals.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doctor Statistics & Appointments Queue -->
+    <div class="col-lg-8">
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="stat-card">
+                    <div>
+                        <span class="text-secondary small fw-semibold">Pending Consultations</span>
+                        <h3 class="fw-bold mt-1 text-teal" style="color: var(--primary-color);">{{ scheduled|length }}</h3>
+                    </div>
+                    <div class="icon-box bg-teal-soft" style="background-color: rgba(15, 118, 110, 0.1); color: var(--primary-color);">
+                        <i class="fa-solid fa-people-arrows"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="stat-card stat-card-blue">
+                    <div>
+                        <span class="text-secondary small fw-semibold">Completed Today</span>
+                        <h3 class="fw-bold mt-1 text-primary" style="color: var(--secondary-color);">{{ completed|length }}</h3>
+                    </div>
+                    <div class="icon-box bg-primary bg-opacity-10 text-primary">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Consultation Queue Table -->
+        <div class="card p-3">
+            <div class="card-header border-0 d-flex flex-wrap align-items-center justify-content-between g-2">
+                <h5 class="fw-bold mb-0 text-teal" style="color: var(--primary-color);"><i class="fa-solid fa-list-check me-2"></i>Patient Roster & Consultation Queue</h5>
+                <div class="d-flex align-items-center">
+                    <input type="text" id="search-doctors" class="form-control form-control-sm border-secondary-subtle rounded-3 py-1.5" style="max-width: 200px;" placeholder="Filter patient name...">
+                </div>
+            </div>
+            <div class="card-body px-1">
+                <!-- Navigation Tabs -->
+                <ul class="nav nav-pills mb-3" id="doctorTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="scheduled-tab" data-bs-toggle="pill" data-bs-target="#scheduled" type="button" role="tab" aria-controls="scheduled" aria-selected="true">
+                            Scheduled ({{ scheduled|length }})
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="completed-tab" data-bs-toggle="pill" data-bs-target="#completed" type="button" role="tab" aria-controls="completed" aria-selected="false">
+                            Completed History ({{ completed|length }})
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="doctorTabContent">
+                    <!-- Scheduled patients -->
+                    <div class="tab-pane fade show active" id="scheduled" role="tabpanel" aria-labelledby="scheduled-tab">
+                        {% if scheduled %}
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Patient Name</th>
+                                            <th>Blood / Gender</th>
+                                            <th>Consult Date & Time</th>
+                                            <th class="text-end">Clinical Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for appt in scheduled %}
+                                        <tr class="doctor-row">
+                                            <td class="fw-bold">{{ appt.patient.user.name }}</td>
+                                            <td>
+                                                <span class="badge bg-danger-subtle text-danger me-1">{{ appt.patient.blood_group }}</span>
+                                                <span class="badge bg-secondary-subtle text-secondary">{{ appt.patient.gender }}</span>
+                                            </td>
+                                            <td>
+                                                <i class="fa-solid fa-calendar me-1 text-secondary"></i> {{ appt.appointment_date.strftime('%b %d, %Y') }} <br>
+                                                <i class="fa-solid fa-clock me-1 text-secondary"></i> {{ appt.appointment_time.strftime('%I:%M %p') }}
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="{{ url_for('doctor.patient_history', patient_id=appt.patient.id) }}" class="btn btn-outline-secondary btn-sm rounded-3 me-2" title="View Patient History">
+                                                    <i class="fa-solid fa-history"></i> History
+                                                </a>
+                                                <a href="{{ url_for('doctor.prescribe', appt_id=appt.id) }}" class="btn btn-primary btn-sm rounded-3">
+                                                    <i class="fa-solid fa-prescription"></i> Diagnose / Rx
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <i class="fa-solid fa-hospital-user text-secondary opacity-50 fs-2 mb-2"></i>
+                                <p class="text-secondary mb-0">No scheduled consultations pending in your queue.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Completed History -->
+                    <div class="tab-pane fade" id="completed" role="tabpanel" aria-labelledby="completed-tab">
+                        {% if completed %}
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Patient Name</th>
+                                            <th>Date of Consult</th>
+                                            <th>Time Slot</th>
+                                            <th>Prescription</th>
+                                            <th class="text-end">Manage</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for appt in completed %}
+                                        <tr class="doctor-row">
+                                            <td class="fw-bold">{{ appt.patient.user.name }}</td>
+                                            <td>{{ appt.appointment_date.strftime('%b %d, %Y') }}</td>
+                                            <td>{{ appt.appointment_time.strftime('%I:%M %p') }}</td>
+                                            <td>
+                                                {% if appt.prescription %}
+                                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1"><i class="fa-solid fa-check"></i> Published</span>
+                                                {% else %}
+                                                    <span class="badge bg-warning-subtle text-warning px-2 py-1">Missing</span>
+                                                {% endif %}
+                                            </td>
+                                            <td class="text-end">
+                                                <a href="{{ url_for('doctor.patient_history', patient_id=appt.patient.id) }}" class="btn btn-outline-secondary btn-sm rounded-3 me-2" title="View Patient History">
+                                                    <i class="fa-solid fa-history"></i> History
+                                                </a>
+                                                <a href="{{ url_for('doctor.prescribe', appt_id=appt.id) }}" class="btn btn-outline-primary btn-sm rounded-3" title="Edit Diagnosis/Prescription">
+                                                    <i class="fa-solid fa-edit"></i> Edit Rx
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <div class="text-center py-5">
+                                <p class="text-secondary mb-0">No completed consultations recorded in the history log.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

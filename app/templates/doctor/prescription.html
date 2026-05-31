@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Write Diagnosis & Prescription{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center my-4">
+    <div class="col-lg-9">
+        <div class="card p-4">
+            <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between mb-4 border-bottom pb-3">
+                    <div>
+                        <span class="badge bg-primary-subtle text-primary mb-1">Appointment ID: APP-{{ "%04d"|format(appt.id) }}</span>
+                        <h3 class="fw-bold text-teal mb-0" style="color: var(--primary-color);">Clinical Diagnosis & Prescription</h3>
+                    </div>
+                    <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-outline-secondary rounded-3 btn-sm">
+                        <i class="fa-solid fa-times me-1"></i>Cancel & Close
+                    </a>
+                </div>
+
+                <div class="bg-light p-3 rounded-4 mb-4 small">
+                    <div class="row g-3">
+                        <div class="col-sm-4"><strong>Patient Name:</strong> <br> <span class="text-secondary">{{ appt.patient.user.name }}</span></div>
+                        <div class="col-sm-4"><strong>Age / Gender:</strong> <br> <span class="text-secondary">{{ age if age else 'N/A' }} yrs / {{ appt.patient.gender }}</span></div>
+                        <div class="col-sm-4"><strong>Blood Group:</strong> <br> <span class="badge bg-danger-subtle text-danger">{{ appt.patient.blood_group }}</span></div>
+                    </div>
+                </div>
+
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <h5 class="fw-bold text-secondary mb-3"><i class="fa-solid fa-heart-pulse me-2"></i>1. Symptoms Details</h5>
+                            <label for="symptoms" class="form-label fw-semibold">Patient's Symptoms & Complaints</label>
+                            {% if form.symptoms.errors %}
+                                {{ form.symptoms(class="form-control is-invalid", rows=3, placeholder="Describe patient symptoms...") }}
+                                <div class="invalid-feedback">{% for e in form.symptoms.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.symptoms(class="form-control", rows=3, placeholder="Describe patient symptoms...") }}
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <h5 class="fw-bold text-secondary mb-3"><i class="fa-solid fa-stethoscope me-2"></i>2. Diagnosis Evaluation</h5>
+                            <label for="diagnosis" class="form-label fw-semibold">Clinical Assessment / Diagnosis</label>
+                            {% if form.diagnosis.errors %}
+                                {{ form.diagnosis(class="form-control is-invalid", rows=3, placeholder="Enter clinical assessment...") }}
+                                <div class="invalid-feedback">{% for e in form.diagnosis.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.diagnosis(class="form-control", rows=3, placeholder="Enter clinical assessment...") }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold text-secondary border-bottom pb-2 mb-3"><i class="fa-solid fa-capsules me-2"></i>3. Medication Prescription (Rx)</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-lg-7">
+                            <label for="medications" class="form-label fw-semibold">Medications List (One per line)</label>
+                            {% if form.medications.errors %}
+                                {{ form.medications(class="form-control is-invalid", rows=5, placeholder="Medicine - Dosage - Frequency - Duration") }}
+                                <div class="invalid-feedback">{% for e in form.medications.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.medications(class="form-control", rows=5, placeholder="Medicine - Dosage - Frequency - Duration") }}
+                            {% endif %}
+                            <div class="form-text small text-secondary mt-1">
+                                <strong>Standard Format:</strong> Drug Name - Dosage (e.g. 500mg) - Frequency (e.g. 1-0-1) - Duration (e.g. 5 days) <br>
+                                Split multiple medicines using a new line.
+                            </div>
+                        </div>
+                        <div class="col-lg-5">
+                            <div class="card bg-teal-soft h-100 border-0 p-3" style="background-color: rgba(15, 118, 110, 0.05);">
+                                <h6 class="fw-bold text-teal mb-2"><i class="fa-solid fa-lightbulb me-1"></i>Formatting Cheat Sheet</h6>
+                                <p class="text-secondary small mb-2">Ensure your entries resemble this template:</p>
+                                <pre class="bg-white p-2 border rounded-3 mb-0 text-dark small" style="font-family: monospace;">Paracetamol - 500mg - 1-0-1 - 5 days
+Amoxicillin - 250mg - 1-1-1 - 7 days
+Cetirizine - 10mg - 0-0-1 - 3 days</pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold text-secondary border-bottom pb-2 mb-3"><i class="fa-solid fa-hand-holding-medical me-2"></i>4. Clinical Advice & Treatment Details</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="treatment_plan" class="form-label fw-semibold">Treatment Plan / Long-term Advice</label>
+                            {% if form.treatment_plan.errors %}
+                                {{ form.treatment_plan(class="form-control is-invalid", rows=3, placeholder="Diet advice, exercise instructions, tests recommended...") }}
+                                <div class="invalid-feedback">{% for e in form.treatment_plan.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.treatment_plan(class="form-control", rows=3, placeholder="Diet advice, exercise instructions, tests recommended...") }}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="instructions" class="form-label fw-semibold">Special Rx Instructions</label>
+                            {% if form.instructions.errors %}
+                                {{ form.instructions(class="form-control is-invalid", rows=3, placeholder="Take with warm water, avoid cold items...") }}
+                                <div class="invalid-feedback">{% for e in form.instructions.errors %}<span>{{ e }}</span>{% endfor %}</div>
+                            {% else %}
+                                {{ form.instructions(class="form-control", rows=3, placeholder="Take with warm water, avoid cold items...") }}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 mb-2">
+                        {{ form.submit(class="btn btn-primary btn-lg rounded-3") }}
+                        <a href="{{ url_for('doctor.doctor_dashboard') }}" class="btn btn-outline-secondary rounded-3">Discard & Close</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
