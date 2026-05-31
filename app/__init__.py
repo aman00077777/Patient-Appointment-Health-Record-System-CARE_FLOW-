@@ -30,6 +30,9 @@ def create_app():
         
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'connect_args': {'sslmode': 'require'} if 'neon' in database_url else {}
+    }
 
     # Bind extensions
     from app.models import db, User
@@ -40,6 +43,10 @@ def create_app():
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
+
+    # Create all database tables BEFORE scheduler starts
+    with app.app_context():
+        db.create_all()
 
     # Register Blueprint routes
     from app.patient.routes import patient_bp
